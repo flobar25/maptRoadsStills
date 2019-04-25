@@ -31,7 +31,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-
+    
     
 private:
     // midi
@@ -40,8 +40,17 @@ private:
     // camera
     ofEasyCam cam;
     
+    // lights
+    vector<ofLight*> lights;
+    
     // recording
     ofxImageSequenceRecorder recorder;
     Boolean recording;
     ofImage screenCapture;
+    
+    // shapes
+    vector<ofBoxPrimitive*> cubes;
+    vector<ofBoxPrimitive*> roads;
+    ofTexture oceanTexture;
+    ofTexture moonTexture;
 };
