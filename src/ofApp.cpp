@@ -40,6 +40,8 @@ void ofApp::setup(){
         roads.push_back(road);
     }
     
+    fboCapture.allocate(ofGetWidth() * CAPTURE_SCALE, ofGetHeight() * CAPTURE_SCALE, GL_RGBA);
+    screenCapture.allocate(ofGetWidth() * CAPTURE_SCALE, ofGetHeight() * CAPTURE_SCALE, ofImageType::OF_IMAGE_COLOR_ALPHA);
     
     ofImage oceanImage;
     oceanImage.load("ocean.jpg");
@@ -85,8 +87,14 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+
+    if (capture){
+        fboCapture.begin();
+        ofClear(ofColor::white);
+        ofScale(5, 5, 5);
+    }
+
     cam.begin();
-    
     oceanTexture.bind();
     for (auto cube : cubes){
         cube->draw();
@@ -98,11 +106,20 @@ void ofApp::draw(){
         road->draw();
     }
     moonTexture.unbind();
-    
     cam.end();
     
+    // capture one image (this might skip a rendering frame on the screen)
+    if (capture){
+        fboCapture.end();
+        ofPixels pixels;
+        fboCapture.readToPixels(pixels);
+        screenCapture.setFromPixels(pixels);
+        screenCapture.save("captures/capture.bmp");
+        capture = false;
+    }
     
-    // capture the image if recording is started
+    
+    // capture all the images if recording is started
     // this can slow down the rendering by a lot, so be aware of the framerate...
     // if frames are skipped this is going to mess up the rendering when imported as a video
     if (recording){
@@ -130,8 +147,7 @@ void ofApp::newMidiMessage(ofxMidiMessage& eventArgs){
 }
 
 void ofApp::captureScreen(){
-    screenCapture.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
-    screenCapture.save("captures/capture.bmp");
+    capture = true;
 }
 
 //--------------------------------------------------------------

@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxImageSequenceRecorder.h"
+#define CAPTURE_SCALE 5
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
     
@@ -46,7 +47,9 @@ private:
     // recording
     ofxImageSequenceRecorder recorder;
     Boolean recording;
+    Boolean capture;
     ofImage screenCapture;
+    ofFbo fboCapture;
     
     // shapes
     vector<ofBoxPrimitive*> cubes;
