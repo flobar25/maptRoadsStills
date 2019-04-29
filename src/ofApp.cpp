@@ -13,7 +13,7 @@ void ofApp::setup(){
     midiIn.addListener(this);
     
     ofSetBackgroundColor(ofColor::white);
-    for (int i = 0; i < 1000; i++){
+    for (int i = 0; i < 10000; i++){
         ofVec3f p;
         p.x = ofRandomf();
         p.y = ofRandomf();
@@ -21,7 +21,7 @@ void ofApp::setup(){
         p /= sqrt(p.x*p.x + p.y*p.y + p.z*p.z);
         p *= 2000;
         ofBoxPrimitive* cube = new ofBoxPrimitive();
-        cube->set(75);
+        cube->set(15);
         cube->setPosition(p.x, p.y, p.z);
         cubes.push_back(cube);
     }
@@ -33,7 +33,7 @@ void ofApp::setup(){
         auto roll = ofRandom(360);
         auto pan = ofRandom(360);
         road->setPosition(0, 0, 0);
-        road->set(5, 5, 10000);
+        road->set(5, 5, 100000);
         road->tiltDeg(tilt);
         road->rollDeg(roll);
         road->panDeg(pan);
@@ -65,11 +65,16 @@ void ofApp::setup(){
     light1->enable();
     
     ofLight* light2 = new ofLight();
-    light2->setPosition(1000, 1000, 2000);
+    light2->setPosition(0, 0, 3000);
     light2->enable();
+    
+    ofLight* light3 = new ofLight();
+    light3->setPosition(3500, 0, 0);
+    light3->enable();
     
     lights.push_back(light1);
     lights.push_back(light2);
+    lights.push_back(light3);
 }
 
 void ofApp::exit(){
@@ -91,7 +96,7 @@ void ofApp::draw(){
     if (capture){
         fboCapture.begin();
         ofClear(ofColor::white);
-        ofScale(5, 5, 5);
+        ofScale(CAPTURE_SCALE, CAPTURE_SCALE, CAPTURE_SCALE);
     }
 
     cam.begin();
